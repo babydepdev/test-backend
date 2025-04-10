@@ -3,6 +3,7 @@ import { CatchAsyncError } from "../utils/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import { Request, Response, NextFunction } from "express";
 import prisma from "../prisma/prisma";
+import { DataWithMonth, Transaction } from "../types/transaction.type";
 
 export const createTransactionController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -78,12 +79,20 @@ export const filterTransactionController = CatchAsyncError(
       });
 
       const totalIncome = transactions
-        .filter((transaction) => transaction.type === "Income")
-        .reduce((total, transaction) => total + transaction.amount, 0);
+        .filter((transaction: Transaction) => transaction.type === "Income")
+        .reduce(
+          (total: number, transaction: Transaction) =>
+            total + transaction.amount,
+          0
+        );
 
       const totalExpense = transactions
-        .filter((transaction) => transaction.type === "Expense")
-        .reduce((total, transaction) => total + transaction.amount, 0);
+        .filter((transaction: Transaction) => transaction.type === "Expense")
+        .reduce(
+          (total: number, transaction: Transaction) =>
+            total + transaction.amount,
+          0
+        );
 
       const total = totalIncome - totalExpense;
 
@@ -142,58 +151,71 @@ export const dashboardTransactionController = CatchAsyncError(
       const monthlyDataCurrentYear = months.map((month, index) => {
         const income = currentYearTransactions
           .filter(
-            (transaction) =>
+            (transaction: Transaction) =>
               new Date(transaction.createdAt).getMonth() === index &&
               transaction.type === "Income"
           )
-          .reduce((sum, transaction) => sum + transaction.amount, 0);
+          .reduce(
+            (sum: number, transaction: Transaction) => sum + transaction.amount,
+            0
+          );
 
         const expense = currentYearTransactions
           .filter(
-            (transaction) =>
+            (transaction: Transaction) =>
               new Date(transaction.createdAt).getMonth() === index &&
               transaction.type === "Expense"
           )
-          .reduce((sum, transaction) => sum + transaction.amount, 0);
+          .reduce(
+            (sum: number, transaction: Transaction) => sum + transaction.amount,
+            0
+          );
 
         return { month, income, expense };
       });
+      console.log(monthlyDataCurrentYear);
 
       const monthlyDataPreviousYear = months.map((month, index) => {
         const income = previousYearTransactions
           .filter(
-            (transaction) =>
+            (transaction: Transaction) =>
               new Date(transaction.createdAt).getMonth() === index &&
               transaction.type === "Income"
           )
-          .reduce((sum, transaction) => sum + transaction.amount, 0);
+          .reduce(
+            (sum: number, transaction: Transaction) => sum + transaction.amount,
+            0
+          );
 
         const expense = previousYearTransactions
           .filter(
-            (transaction) =>
+            (transaction: Transaction) =>
               new Date(transaction.createdAt).getMonth() === index &&
               transaction.type === "Expense"
           )
-          .reduce((sum, transaction) => sum + transaction.amount, 0);
+          .reduce(
+            (sum: number, transaction: Transaction) => sum + transaction.amount,
+            0
+          );
 
         return { month, income, expense };
       });
 
       const totalIncomeCurrentYear = monthlyDataCurrentYear.reduce(
-        (sum, data) => sum + data.income,
+        (sum: number, data: DataWithMonth) => sum + data.income,
         0
       );
       const totalExpenseCurrentYear = monthlyDataCurrentYear.reduce(
-        (sum, data) => sum + data.expense,
+        (sum: number, data: DataWithMonth) => sum + data.expense,
         0
       );
 
       const totalIncomePreviousYear = monthlyDataPreviousYear.reduce(
-        (sum, data) => sum + data.income,
+        (sum: number, data: DataWithMonth) => sum + data.income,
         0
       );
       const totalExpensePreviousYear = monthlyDataPreviousYear.reduce(
-        (sum, data) => sum + data.expense,
+        (sum: number, data: DataWithMonth) => sum + data.expense,
         0
       );
 
