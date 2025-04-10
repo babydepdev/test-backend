@@ -18,7 +18,10 @@ export const createUserController = CatchAsyncError(
     const { name, email, phoneNumber } = req.body;
 
     if (!name || !email || !phoneNumber) {
-      throw new ErrorHandler("Missing required fields", 400);
+      throw new ErrorHandler(
+        RESPONSE_MESSAGE.MISSING_REQUIRED_FIELD,
+        RESPONSE_STATUS.MISSING_REQUIRED_FIELD
+      );
     }
 
     try {
@@ -53,7 +56,12 @@ export const createUserController = CatchAsyncError(
       res.status(201).json({ msg: "User created successfully", data: result });
     } catch (error) {
       console.log(error);
-      return next(new ErrorHandler("Internal server error", 500));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR,
+          RESPONSE_STATUS.INTERNAL_SERVER_ERROR
+        )
+      );
     }
   }
 );
@@ -67,7 +75,12 @@ export const getAllUserController = CatchAsyncError(
         .json({ msg: "All users fetched successfully", data: result });
     } catch (error) {
       console.log(error);
-      return next(new ErrorHandler("Internal server error", 500));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR,
+          RESPONSE_STATUS.INTERNAL_SERVER_ERROR
+        )
+      );
     }
   }
 );
@@ -79,12 +92,22 @@ export const readUserController = CatchAsyncError(
     try {
       const result = await readUserByIdService(id);
       if (!result) {
-        return next(new ErrorHandler("User not found", 404));
+        return next(
+          new ErrorHandler(
+            RESPONSE_MESSAGE.USER_NOT_FOUND,
+            RESPONSE_STATUS.DATA_NOT_FOUND
+          )
+        );
       }
       res.status(200).json({ msg: "User fetched successfully", data: result });
     } catch (error) {
       console.log(error);
-      return next(new ErrorHandler("Internal server error", 500));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR,
+          RESPONSE_STATUS.INTERNAL_SERVER_ERROR
+        )
+      );
     }
   }
 );
@@ -98,7 +121,12 @@ export const updateUserController = CatchAsyncError(
       const isCheckUser = await readUserByIdService(id);
 
       if (!isCheckUser) {
-        return next(new ErrorHandler("User not found", 404));
+        return next(
+          new ErrorHandler(
+            RESPONSE_MESSAGE.USER_NOT_FOUND,
+            RESPONSE_STATUS.DATA_NOT_FOUND
+          )
+        );
       }
 
       if (!name || !phoneNumber) {
@@ -120,7 +148,12 @@ export const updateUserController = CatchAsyncError(
       res.status(200).json({ msg: "User updated successfully", data: result });
     } catch (error) {
       console.log(error);
-      return next(new ErrorHandler("Internal server error", 500));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR,
+          RESPONSE_STATUS.INTERNAL_SERVER_ERROR
+        )
+      );
     }
   }
 );
@@ -132,7 +165,12 @@ export const softDeleteUserController = CatchAsyncError(
       const isCheckUser = await readUserByIdService(id);
 
       if (!isCheckUser) {
-        return next(new ErrorHandler("User not found", 404));
+        return next(
+          new ErrorHandler(
+            RESPONSE_MESSAGE.USER_NOT_FOUND,
+            RESPONSE_STATUS.DATA_NOT_FOUND
+          )
+        );
       }
 
       if (isCheckUser.deleted) {
@@ -143,7 +181,12 @@ export const softDeleteUserController = CatchAsyncError(
       res.status(200).json({ msg: "User deleted successfully", data: result });
     } catch (error) {
       console.log(error);
-      return next(new ErrorHandler("Internal server error", 500));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR,
+          RESPONSE_STATUS.INTERNAL_SERVER_ERROR
+        )
+      );
     }
   }
 );

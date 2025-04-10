@@ -12,14 +12,24 @@ export const topupController = CatchAsyncError(
       const isCheckUser = await readUserByIdService(userId);
 
       if (!isCheckUser) {
-        return next(new ErrorHandler("User not found", 404));
+        return next(
+          new ErrorHandler(
+            RESPONSE_MESSAGE.USER_NOT_FOUND,
+            RESPONSE_STATUS.DATA_NOT_FOUND
+          )
+        );
       }
 
       const result = await topupService(userId, wallet_topup);
       res.status(200).json({ msg: "User updated successfully", data: result });
     } catch (error) {
       console.log(error);
-      return next(new ErrorHandler("Internal server error", 500));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR,
+          RESPONSE_STATUS.INTERNAL_SERVER_ERROR
+        )
+      );
     }
   }
 );

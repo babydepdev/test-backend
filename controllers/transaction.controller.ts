@@ -11,7 +11,12 @@ export const createTransactionController = CatchAsyncError(
     const { name, type, amount } = req.body;
 
     if (!name || !type || !amount) {
-      return next(new ErrorHandler("Missing required fields", 400));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.MISSING_REQUIRED_FIELD,
+          RESPONSE_STATUS.MISSING_REQUIRED_FIELD
+        )
+      );
     }
 
     if (type !== "Income" && type !== "Expense") {
@@ -27,7 +32,12 @@ export const createTransactionController = CatchAsyncError(
       res.status(201).json(transaction);
     } catch (error) {
       console.log(error);
-      return next(new ErrorHandler("Internal server error", 500));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR,
+          RESPONSE_STATUS.INTERNAL_SERVER_ERROR
+        )
+      );
     }
   }
 );
@@ -107,7 +117,12 @@ export const filterTransactionController = CatchAsyncError(
       });
     } catch (error) {
       console.log(error);
-      return next(new ErrorHandler("Internal server error", 500));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR,
+          RESPONSE_STATUS.INTERNAL_SERVER_ERROR
+        )
+      );
     }
   }
 );
@@ -135,21 +150,6 @@ export const dashboardTransactionController = CatchAsyncError(
           },
         },
       });
-
-      // const months = [
-      //   "มกราคม",
-      //   "กุมภาพันธ์",
-      //   "มีนาคม",
-      //   "เมษายน",
-      //   "พฤษภาคม",
-      //   "มิถุนายน",
-      //   "กรกฎาคม",
-      //   "สิงหาคม",
-      //   "กันยายน",
-      //   "ตุลาคม",
-      //   "พฤศจิกายน",
-      //   "ธันวาคม",
-      // ];
 
       const monthlyDataCurrentYear = months.map((month, index) => {
         const income = currentYearTransactions
@@ -242,7 +242,12 @@ export const dashboardTransactionController = CatchAsyncError(
       });
     } catch (error) {
       console.log(error);
-      return next(new ErrorHandler("Internal server error", 500));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR,
+          RESPONSE_STATUS.INTERNAL_SERVER_ERROR
+        )
+      );
     }
   }
 );

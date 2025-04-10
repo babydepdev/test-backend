@@ -21,13 +21,23 @@ export const createOrderController = CatchAsyncError(
       const user = await readUserByIdService(userId);
 
       if (!user) {
-        return next(new ErrorHandler("User not found", 404));
+        return next(
+          new ErrorHandler(
+            RESPONSE_MESSAGE.USER_NOT_FOUND,
+            RESPONSE_STATUS.DATA_NOT_FOUND
+          )
+        );
       }
 
       const product = await getProductByIdService(productId);
 
       if (!product) {
-        return next(new ErrorHandler("Product not found", 404));
+        return next(
+          new ErrorHandler(
+            RESPONSE_MESSAGE.PRODUCT_NOT_FOUND,
+            RESPONSE_STATUS.DATA_NOT_FOUND
+          )
+        );
       }
 
       const order: OrderCreateParams = {
@@ -50,7 +60,12 @@ export const createOrderController = CatchAsyncError(
       res.status(201).json({ result });
     } catch (error) {
       console.log(error);
-      return next(new ErrorHandler("Internal server error", 500));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.INTERNAL_SERVER_ERROR,
+          RESPONSE_STATUS.INTERNAL_SERVER_ERROR
+        )
+      );
     }
   }
 );
