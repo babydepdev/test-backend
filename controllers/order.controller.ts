@@ -7,6 +7,7 @@ import {
   readUserByIdService,
 } from "../services/user.service";
 import { createOrderService } from "../services/order.service";
+import { OrderCreateParams } from "../types/order.type";
 
 export const createOrderController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -29,7 +30,7 @@ export const createOrderController = CatchAsyncError(
         return next(new ErrorHandler("Product not found", 404));
       }
 
-      const order = {
+      const order: OrderCreateParams = {
         userId: userId,
         productId: productId,
         price: product.price,

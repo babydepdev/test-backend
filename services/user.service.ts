@@ -1,5 +1,6 @@
 import prisma from "../prisma/prisma";
-import { UserCreateParams, UserUpdateParams } from "../types/user.type";
+import { OrderCreateParams } from "../types/order.type";
+import { User, UserCreateParams, UserUpdateParams } from "../types/user.type";
 
 export const createUserService = async (user: UserCreateParams) => {
   const result = await prisma.user.create({
@@ -86,7 +87,10 @@ export const getAllUsersService = async () => {
   return result;
 };
 
-export const deductWalletService = async (user: any, order: any) => {
+export const deductWalletService = async (
+  user: User,
+  order: OrderCreateParams
+) => {
   const result = await prisma.user.update({
     where: {
       id: user.id,
