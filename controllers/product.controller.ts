@@ -9,7 +9,7 @@ export const getAllProductController = CatchAsyncError(
     try {
       const results = await getAllProductService();
 
-      if (results) {
+      if (!results) {
         return next(
           new ErrorHandler(
             RESPONSE_MESSAGE.PRODUCT_NOT_FOUND,
