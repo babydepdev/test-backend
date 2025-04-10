@@ -15,4 +15,6 @@ RUN pnpm prisma generate
 
 RUN pnpm run build
 
+RUN ls -l /usr/src/app/build
+
 CMD ["pnpm", "start"]
