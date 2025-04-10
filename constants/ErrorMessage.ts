@@ -1,4 +1,4 @@
-const RESPONSE_MESSAGE = {
+export const RESPONSE_MESSAGE = {
   INTERNAL_SERVER_ERROR: "Internal server error",
   DATA_NOT_FOUND: "No data found",
   USER_NOT_FOUND: "User not found",
@@ -9,7 +9,7 @@ const RESPONSE_MESSAGE = {
   MISSING_REQUIRED_FIELD: "Missing required fields",
 };
 
-const RESPONSE_STATUS = {
+export const RESPONSE_STATUS = {
   INTERNAL_SERVER_ERROR: 500,
   DATA_NOT_FOUND: 404,
   DATA_ALREADY_EXIST: 401,

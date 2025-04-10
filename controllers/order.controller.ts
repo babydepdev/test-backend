@@ -8,13 +8,19 @@ import {
 } from "../services/user.service";
 import { createOrderService } from "../services/order.service";
 import { OrderCreateParams } from "../types/order.type";
+import { RESPONSE_MESSAGE, RESPONSE_STATUS } from "../constants/ErrorMessage";
 
 export const createOrderController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId, productId } = req.body;
 
     if (!userId || !productId) {
-      return next(new ErrorHandler("Missing required fields", 400));
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.MISSING_REQUIRED_FIELD,
+          RESPONSE_STATUS.MISSING_REQUIRED_FIELD
+        )
+      );
     }
 
     try {

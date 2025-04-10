@@ -2,6 +2,7 @@ import { getAllProductService } from "../services/product.service";
 import { CatchAsyncError } from "../utils/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import { Request, Response, NextFunction } from "express";
+import { RESPONSE_MESSAGE, RESPONSE_STATUS } from "../constants/ErrorMessage";
 
 export const getAllProductController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -11,7 +12,7 @@ export const getAllProductController = CatchAsyncError(
       if (results) {
         return next(
           new ErrorHandler(
-            RESPONSE_MESSAGE.DATA_NOT_FOUND,
+            RESPONSE_MESSAGE.PRODUCT_NOT_FOUND,
             RESPONSE_STATUS.DATA_NOT_FOUND
           )
         );

@@ -5,13 +5,14 @@ import {
 import { CatchAsyncError } from "../utils/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import { Request, Response, NextFunction } from "express";
+import { RESPONSE_MESSAGE, RESPONSE_STATUS } from "../constants/ErrorMessage";
 
 export const getAllOrderHistoryController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const results = await getAllOrderHistoryService();
 
-      if (results) {
+      if (!results) {
         return next(
           new ErrorHandler(
             RESPONSE_MESSAGE.ORDER_NOT_FOUND,
@@ -39,6 +40,16 @@ export const readOrderHistoryByIdController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { userId } = req.params;
+
+      if (!userId) {
+        return next(
+          new ErrorHandler(
+            RESPONSE_MESSAGE.MISSING_REQUIRED_FIELD,
+            RESPONSE_STATUS.MISSING_REQUIRED_FIELD
+          )
+        );
+      }
+
       const result = await readOrderHistoryService(userId);
 
       if (!result) {

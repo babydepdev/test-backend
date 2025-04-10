@@ -3,11 +3,22 @@ import ErrorHandler from "../utils/ErrorHandler";
 import { Request, Response, NextFunction } from "express";
 import { readUserByIdService } from "../services/user.service";
 import { topupService } from "../services/topup.service";
+import { RESPONSE_MESSAGE, RESPONSE_STATUS } from "../constants/ErrorMessage";
 
 export const topupController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.params;
     const { wallet_topup } = req.body;
+
+    if (!wallet_topup || !userId) {
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.MISSING_REQUIRED_FIELD,
+          RESPONSE_STATUS.MISSING_REQUIRED_FIELD
+        )
+      );
+    }
+
     try {
       const isCheckUser = await readUserByIdService(userId);
 

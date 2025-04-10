@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express";
 import prisma from "../prisma/prisma";
 import { DataWithMonth, Transaction } from "../types/transaction.type";
 import { months } from "../constants/Month";
+import { RESPONSE_MESSAGE, RESPONSE_STATUS } from "../constants/ErrorMessage";
 
 export const createTransactionController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -216,6 +217,7 @@ export const dashboardTransactionController = CatchAsyncError(
         (sum: number, data: DataWithMonth) => sum + data.income,
         0
       );
+      
       const totalExpensePreviousYear = monthlyDataPreviousYear.reduce(
         (sum: number, data: DataWithMonth) => sum + data.expense,
         0
@@ -232,6 +234,9 @@ export const dashboardTransactionController = CatchAsyncError(
           100
         : 0;
 
+      const totalCurrent = totalIncomeCurrentYear - totalExpenseCurrentYear;
+      const totalPrev = totalIncomePreviousYear - totalExpensePreviousYear;
+
       res.status(200).json({
         monthlyDataCurrentYear,
         monthlyDataPreviousYear,
@@ -239,6 +244,8 @@ export const dashboardTransactionController = CatchAsyncError(
         totalExpenseCurrentYear,
         incomeGrowth,
         expenseGrowth,
+        totalCurrent,
+        totalPrev,
       });
     } catch (error) {
       console.log(error);

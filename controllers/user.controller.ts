@@ -12,6 +12,7 @@ import {
 } from "../services/user.service";
 import bcrypt from "bcryptjs";
 import { UserCreateParams } from "../types/user.type";
+import { RESPONSE_MESSAGE, RESPONSE_STATUS } from "../constants/ErrorMessage";
 
 export const createUserController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -88,6 +89,14 @@ export const getAllUserController = CatchAsyncError(
 export const readUserController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
+    if (!id) {
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.MISSING_REQUIRED_FIELD,
+          RESPONSE_STATUS.MISSING_REQUIRED_FIELD
+        )
+      );
+    }
 
     try {
       const result = await readUserByIdService(id);
@@ -117,6 +126,15 @@ export const updateUserController = CatchAsyncError(
     const { id } = req.params;
     const { name, phoneNumber } = req.body;
 
+    if (!id || !name || !phoneNumber) {
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.MISSING_REQUIRED_FIELD,
+          RESPONSE_STATUS.MISSING_REQUIRED_FIELD
+        )
+      );
+    }
+
     try {
       const isCheckUser = await readUserByIdService(id);
 
@@ -130,7 +148,10 @@ export const updateUserController = CatchAsyncError(
       }
 
       if (!name || !phoneNumber) {
-        throw new ErrorHandler("Missing required fields", 400);
+        throw new ErrorHandler(
+          RESPONSE_MESSAGE.MISSING_REQUIRED_FIELD,
+          RESPONSE_STATUS.MISSING_REQUIRED_FIELD
+        );
       }
 
       const isPhoneNumberValid = validatePhoneNumber(phoneNumber);
@@ -161,6 +182,16 @@ export const updateUserController = CatchAsyncError(
 export const softDeleteUserController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
+
+    if (!id) {
+      return next(
+        new ErrorHandler(
+          RESPONSE_MESSAGE.MISSING_REQUIRED_FIELD,
+          RESPONSE_STATUS.MISSING_REQUIRED_FIELD
+        )
+      );
+    }
+
     try {
       const isCheckUser = await readUserByIdService(id);
 
