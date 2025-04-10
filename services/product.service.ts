@@ -1,6 +1,6 @@
 import prisma from "../prisma/prisma";
 
-export const getProductById = async (id: string) => {
+export const getProductByIdService = async (id: string) => {
   const product = await prisma.product.findUnique({
     where: {
       id,
@@ -8,4 +8,18 @@ export const getProductById = async (id: string) => {
   });
 
   return product;
+};
+
+export const getAllProductService = async () => {
+  const result = await prisma.product.findMany({
+    select: {
+      id: true,
+      name: true,
+      price: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+
+  return result;
 };

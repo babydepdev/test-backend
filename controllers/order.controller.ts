@@ -1,7 +1,7 @@
 import { CatchAsyncError } from "../utils/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import { Request, Response, NextFunction } from "express";
-import { getProductById } from "../services/product.service";
+import { getProductByIdService } from "../services/product.service";
 import {
   deductWalletService,
   readUserByIdService,
@@ -24,7 +24,7 @@ export const createOrderController = CatchAsyncError(
         return next(new ErrorHandler("User not found", 404));
       }
 
-      const product = await getProductById(productId);
+      const product = await getProductByIdService(productId);
 
       if (!product) {
         return next(new ErrorHandler("Product not found", 404));
