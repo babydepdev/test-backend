@@ -13,6 +13,8 @@ RUN pnpm add @prisma/client
 
 COPY . .
 
+RUN pnpm add ts-node-dev --save-dev
+
 RUN pnpm prisma generate
 
 RUN pnpm tsc
