@@ -12,4 +12,4 @@ services:
       - .env
     volumes:
       - .:/usr/src/app
-    command: pnpm dev
+    command: pnpm start

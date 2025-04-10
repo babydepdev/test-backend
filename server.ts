@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import cors from "cors";
 import { readdirSync } from "fs";
+import path from "path";
 
 const app: Express = express();
 
@@ -15,9 +16,10 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-readdirSync("./routes").map((files) =>
-  app.use("/api/v1", require(`./routes/${files}`).default)
-);
+readdirSync(path.join(__dirname, "routes")).forEach((file) => {
+  const route = require(`./routes/${file}`).default;
+  app.use("/api/v1", route);
+});
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
