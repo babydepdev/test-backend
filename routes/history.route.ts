@@ -5,7 +5,7 @@ import {
 } from "../controllers/history.controller";
 const historyRoutes = Router();
 
-historyRoutes.get("/history", getAllOrderHistoryController);
+historyRoutes.get("/historys", getAllOrderHistoryController);
 historyRoutes.get("/history/:userId", readOrderHistoryByIdController);
 
 export default historyRoutes;

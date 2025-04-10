@@ -8,7 +8,7 @@ import {
 const transactionRouter = Router();
 
 transactionRouter.post("/transaction", createTransactionController);
-transactionRouter.get("/transaction", filterTransactionController);
+transactionRouter.get("/transactions", filterTransactionController);
 transactionRouter.get("/transaction/dashboard", dashboardTransactionController);
 
 export default transactionRouter;

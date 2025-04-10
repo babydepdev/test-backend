@@ -1,9 +1,10 @@
-import { createTransactionService } from "../services/transaction.controller";
+import { createTransactionService } from "../services/transaction.service";
 import { CatchAsyncError } from "../utils/catchAsyncError";
 import ErrorHandler from "../utils/ErrorHandler";
 import { Request, Response, NextFunction } from "express";
 import prisma from "../prisma/prisma";
 import { DataWithMonth, Transaction } from "../types/transaction.type";
+import { months } from "../constants/Month";
 
 export const createTransactionController = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -36,9 +37,11 @@ export const filterTransactionController = CatchAsyncError(
     const type = (req.query.type as string) || "All";
 
     const currentYear = new Date().getFullYear();
+
     const dateStart =
       (req.query.dateStart as string) ||
       new Date(`${currentYear}-01-01T00:00:00.000Z`).toISOString();
+
     const dateEnd =
       (req.query.dateEnd as string) ||
       new Date(`${currentYear}-12-31T23:59:59.999Z`).toISOString();
@@ -133,20 +136,20 @@ export const dashboardTransactionController = CatchAsyncError(
         },
       });
 
-      const months = [
-        "มกราคม",
-        "กุมภาพันธ์",
-        "มีนาคม",
-        "เมษายน",
-        "พฤษภาคม",
-        "มิถุนายน",
-        "กรกฎาคม",
-        "สิงหาคม",
-        "กันยายน",
-        "ตุลาคม",
-        "พฤศจิกายน",
-        "ธันวาคม",
-      ];
+      // const months = [
+      //   "มกราคม",
+      //   "กุมภาพันธ์",
+      //   "มีนาคม",
+      //   "เมษายน",
+      //   "พฤษภาคม",
+      //   "มิถุนายน",
+      //   "กรกฎาคม",
+      //   "สิงหาคม",
+      //   "กันยายน",
+      //   "ตุลาคม",
+      //   "พฤศจิกายน",
+      //   "ธันวาคม",
+      // ];
 
       const monthlyDataCurrentYear = months.map((month, index) => {
         const income = currentYearTransactions
@@ -173,7 +176,6 @@ export const dashboardTransactionController = CatchAsyncError(
 
         return { month, income, expense };
       });
-      console.log(monthlyDataCurrentYear);
 
       const monthlyDataPreviousYear = months.map((month, index) => {
         const income = previousYearTransactions
