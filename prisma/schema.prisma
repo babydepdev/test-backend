@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String
+  password      String
+  phoneNumber   String
+  rate_discount Float    @default(0)
+  wallet        Float    @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  deleted       Boolean  @default(false)
+  Topup         Topup[]
+  Order         Order[]
+}
+
+model Topup {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @db.ObjectId
+  User         User     @relation(fields: [userId], references: [id])
+  wallet_topup Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Product {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  price     Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Order     Order[]
+}
+
+model Order {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  User           User     @relation(fields: [userId], references: [id])
+  productId      String   @db.ObjectId
+  Product        Product  @relation(fields: [productId], references: [id])
+  price          Float
+  discount_price Float
+  discount_rate  Float
+  total          Float
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+enum TransactionType {
+  Income
+  Expense
+}
+
+model Transaction {
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  type      TransactionType
+  amount    Float
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
