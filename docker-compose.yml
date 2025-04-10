@@ -9,6 +9,4 @@ services:
       - "3000:3000"
     env_file:
       - .env
-    volumes:
-      - .:/usr/src/app
-    command: pnpm start
+    command: sh -c "pnpm start"
